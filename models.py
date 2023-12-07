@@ -1,9 +1,9 @@
 """Models for Blogly."""
 
 from flask_sqlalchemy import SQLAlchemy
-
-DEFAULT_IMAGE_URL = 'https://i.pinimg.com/550x/18/b9/ff/18b9ffb2a8a791d50213a9d595c4dd52.jpg'
+# move image below db
 db = SQLAlchemy()
+DEFAULT_IMAGE_URL = 'https://i.pinimg.com/550x/18/b9/ff/18b9ffb2a8a791d50213a9d595c4dd52.jpg'
 
 
 class User(db.Model):
@@ -29,7 +29,10 @@ class User(db.Model):
 
     image_url = db.Column(
         db.Text(),
+        nullable=False,
         default= DEFAULT_IMAGE_URL
+        #Consider nullable. Is the image url unknown? Enforce null and lean on the default.
+        #the url validation can occur at the route level and in the back end
     )
 
 

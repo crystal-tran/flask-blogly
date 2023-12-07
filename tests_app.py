@@ -94,6 +94,7 @@ class UserViewTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn('test2_first', html)
+    # Focus on making more robust tests if on a time constraint
 
     def test_show_user_info(self):
         """Test that user detail page is displayed"""
@@ -103,3 +104,6 @@ class UserViewTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn("<!-- Testing: User Detail -->", html)
+
+# Additional future tests: test updating user, test the image (what we submit and what ends up in the database and what shows on the page)
+# test for invalid inputs, deleting a user, editting a user

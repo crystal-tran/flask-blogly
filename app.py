@@ -23,7 +23,7 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 @app.get("/")
 def redirect_to_users():
-    """Lists users"""
+    """Redirect to users page"""
 
     return redirect("/users")
 
@@ -32,12 +32,13 @@ def list_user():
     """List all user links"""
 
     users = User.query.all()
+    # Improvement tip: make a query with an order by clause
     return render_template("user_listing.html",
                            users=users)
 
 @app.get("/users/new")
 def show_add_user_form():
-    """Listen for add user button"""
+    """Show create user form"""
 
     return render_template("user_form.html")
 
@@ -59,6 +60,7 @@ def process_add_user_form():
     last_name_trimmed = last_name.strip()
     image_url_trimmed = image_url.strip()
 
+
     if not first_name_trimmed:
         flash("You did not provide a first name")
         is_first_name_valid = False
@@ -69,17 +71,15 @@ def process_add_user_form():
 
     if not is_first_name_valid or not is_last_name_valid:
         return redirect("/users/new")
-    else:
-        if not image_url_trimmed:
-            image_url_trimmed = None
 
-        new_user = User(first_name=first_name,
-                        last_name = last_name,
-                        image_url = image_url_trimmed)
-        db.session.add(new_user)
-        db.session.commit()
 
-        return redirect("/users")
+    new_user = User(first_name=first_name,
+                    last_name = last_name,
+                    image_url = image_url_trimmed or None)
+    db.session.add(new_user)
+    db.session.commit()
+
+    return redirect("/users")
 
 @app.get("/users/<int:user_id>")
 def show_user_info(user_id):
@@ -97,7 +97,7 @@ def show_edit_user_form(user_id):
     return render_template("user_edit.html", user=user)
 
 @app.post("/users/<int:user_id>/edit")
-def save_button(user_id):
+def update_user_info(user_id):
     """Updates the user in the database"""
 
     is_first_name_valid = True
@@ -121,20 +121,19 @@ def save_button(user_id):
 
     if not is_first_name_valid or not is_last_name_valid:
         return redirect(f"/users/{user_id}/edit")
-    else:
-        if not image_url_trimmed:
-            image_url_trimmed = DEFAULT_IMAGE_URL
 
-        # retrieve user data from table
-        user = User.query.get_or_404(user_id)
 
-        user.first_name = first_name_trimmed
-        user.last_name = last_name_trimmed
-        user.image_url = image_url_trimmed
+    # retrieve user data from table
+    user = User.query.get_or_404(user_id)
 
-        db.session.commit()
+    user.first_name = first_name_trimmed
+    user.last_name = last_name_trimmed
 
-        return redirect("/users")
+    user.image_url = image_url_trimmed or DEFAULT_IMAGE_URL
+
+    db.session.commit()
+
+    return redirect("/users")
 
 @app.post("/users/<int:user_id>/delete")
 def delete_user(user_id):
