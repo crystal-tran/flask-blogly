@@ -48,9 +48,16 @@ def process_add_user_form():
     last_name = request.form["last_name"]
     image_url = request.form["image_url"]
 
+    image_url_trimmed = image_url.strip()
+    #if we retrieve a url, set image_url to that url
+    #if we retrieve an empty string, set that value to None
+
+    if not image_url_trimmed:
+        image_url_trimmed = None
+
     new_user = User(first_name=first_name,
-                     last_name = last_name,
-                     image_url = image_url)
+                    last_name = last_name,
+                    image_url = image_url_trimmed)
     db.session.add(new_user)
     db.session.commit()
 

@@ -64,5 +64,37 @@ class UserViewTestCase(TestCase):
             resp = c.get("/users/new")
             self.assertEqual(resp.status_code, 200)
             html = resp.get_data(as_text=True)
-            self.assertIn("test1_first", html)
-            self.assertIn("test1_last", html)
+            self.assertIn("<!--Testing that add user form appears-->", html)
+
+    def test_process_add_user_form(self):
+        with app.test_client() as c:
+            resp = c.post("/users/new",
+                          data = {
+                              'first_name': 'test2_first',
+                              'last_name': 'test2_last',
+                              'image_url': ''
+                          })
+
+            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.location,"/users")
+
+    def test_process_add_user_form_followed(self):
+        with app.test_client() as c:
+            resp = c.post("/users/new",
+                          data = {
+                              'first_name': 'test2_first',
+                              'last_name': 'test2_last',
+                              'image_url': ''
+                          }, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('test2_first', html)
+
+    def test_show_user_info(self):
+        with app.test_client() as c:
+            resp = c.get(f"/users/{self.user_id}")
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("<!-- Testing: User Detail -->", html)
