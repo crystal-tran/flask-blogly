@@ -17,6 +17,9 @@ app.config['SECRET_KEY'] = "blogly"
 connect_db(app)
 
 toolbar = DebugToolbarExtension(app)
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+
+
 
 @app.get("/")
 def redirect_to_users():
@@ -58,6 +61,42 @@ def show_user_info(user_id):
     user = User.query.get_or_404(user_id)
     return render_template("user_detail.html", user=user)
 
+
+@app.get("/users/<int:user_id>/edit")
+def show_edit_user_form(user_id):
+    user = User.query.get_or_404(user_id)
+
+    return render_template("user_edit.html", user=user)
+
+@app.post("/users/<int:user_id>/edit")
+def save_button(user_id):
+    """Updates the user in the database"""
+
+    first_name = request.form["first_name"]
+    last_name = request.form["last_name"]
+    image_url = request.form["image_url"]
+
+    # retrieve user data from table
+    user = User.query.get_or_404(user_id)
+
+    user.first_name = first_name
+    user.last_name = last_name
+    user.image_url = image_url
+
+    db.session.commit()
+
+    return redirect("/users")
+
+@app.post("/users/<int:user_id>/delete")
+def delete_user(user_id):
+    """Deletes the user"""
+    user = User.query.get_or_404(user_id)
+    print("user is:", user)
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return redirect("/users")
 
 # INSERT INTO users(first_name, last_name)
 #     VALUES('Crystal', 'Tran')
