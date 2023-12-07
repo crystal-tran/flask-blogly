@@ -58,8 +58,6 @@ def process_add_user_form():
     first_name_trimmed = first_name.strip()
     last_name_trimmed = last_name.strip()
     image_url_trimmed = image_url.strip()
-    #if we retrieve a url, set image_url to that url
-    #if we retrieve an empty string, set that value to None
 
     if not first_name_trimmed:
         flash("You did not provide a first name")
@@ -148,6 +146,3 @@ def delete_user(user_id):
     db.session.commit()
 
     return redirect("/users")
-
-# INSERT INTO users(first_name, last_name)
-#     VALUES('Crystal', 'Tran')

@@ -52,6 +52,7 @@ class UserViewTestCase(TestCase):
         db.session.rollback()
 
     def test_list_users(self):
+        """Test that user list is displayed """
         with app.test_client() as c:
             resp = c.get("/users")
             self.assertEqual(resp.status_code, 200)
@@ -60,6 +61,7 @@ class UserViewTestCase(TestCase):
             self.assertIn("test1_last", html)
 
     def test_add_user_form(self):
+        """Test that user form is displayed"""
         with app.test_client() as c:
             resp = c.get("/users/new")
             self.assertEqual(resp.status_code, 200)
@@ -67,6 +69,7 @@ class UserViewTestCase(TestCase):
             self.assertIn("<!--Testing that add user form appears-->", html)
 
     def test_process_add_user_form(self):
+        """Test that on form submission, page redirects to /users"""
         with app.test_client() as c:
             resp = c.post("/users/new",
                           data = {
@@ -79,6 +82,7 @@ class UserViewTestCase(TestCase):
             self.assertEqual(resp.location,"/users")
 
     def test_process_add_user_form_followed(self):
+        """Tests that new user was added to user list after redirect"""
         with app.test_client() as c:
             resp = c.post("/users/new",
                           data = {
@@ -92,6 +96,7 @@ class UserViewTestCase(TestCase):
             self.assertIn('test2_first', html)
 
     def test_show_user_info(self):
+        """Test that user detail page is displayed"""
         with app.test_client() as c:
             resp = c.get(f"/users/{self.user_id}")
             html = resp.get_data(as_text=True)
