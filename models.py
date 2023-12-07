@@ -28,7 +28,7 @@ class User(db.Model):
 
     image_url = db.Column(
         db.Text(),
-        default='/static/img/default_profile_image.jpg'
+        default='/static/default_profile_image.jpg'
     )
 
 
