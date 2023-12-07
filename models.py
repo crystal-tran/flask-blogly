@@ -8,7 +8,7 @@ db = SQLAlchemy()
 class User(db.Model):
     """User."""
 
-    __tablename__ = "user"
+    __tablename__ = "users"
 
     id = db.Column(
         db.Integer,
@@ -38,3 +38,4 @@ def connect_db(app):
     app.app_context().push()
     db.app = app
     db.init_app(app)
+
