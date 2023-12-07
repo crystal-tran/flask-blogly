@@ -4,6 +4,9 @@
 
 <h1>Users</h1>
 <!--Testing that add user form appears-->
+{% for message in get_flashed_messages() %}
+  <p>{{ message }}</p>
+{% endfor %}
 <form action="/users/new" method="POST">
   <label>First Name</label>
   <input type="text" name="first_name" placeholder="Enter a first name" required>
