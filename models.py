@@ -53,7 +53,7 @@ class Post(db.Model):
         nullable=False
     )
 
-    title = db.Column(
+    content = db.Column(
         db.Text,
         nullable=False
     )

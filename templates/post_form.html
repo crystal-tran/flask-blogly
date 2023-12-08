@@ -12,8 +12,16 @@
   <label>Content</label>
   <!--  <input type="text" name="content_field" required>-->
   <textarea name="content" rows="4" cols="50" required></textarea>
-  <button action="/users/{{ user.id }}" method="GET">Cancel</button>
+
+  <!--Can't seem to get cancel button to take us back to user detail
+  page while the input fields are required; seem to need to put its own field-->
+  <!-- <button formaction="/users/{{ user.id }}" formmethod="GET">Cancel</button> -->
+
   <button>Add</button>
+</form>
+
+<form action="/users/{{ user.id }}" method="GET">
+  <button>Cancel</button>
 </form>
 
 {% endblock %}
