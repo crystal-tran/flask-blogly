@@ -138,6 +138,13 @@ def update_user_info(user_id):
 @app.post("/users/<int:user_id>/delete")
 def delete_user(user_id):
     """Deletes the user"""
+
+    # would have to change route. We would want to delete the posts before
+    # we delete the user. We will get an integrity error.
+    # Insomnia can make a post request directly to this endpoint, without the
+    # ".get_or_404" we would get a 500 code (server error) - security issue
+    # your routes are not always being hit by a user, they can be hit by a browser,
+    # javascript, curl, insomnia, etc
     user = User.query.get_or_404(user_id)
     print("user is:", user)
 
@@ -200,3 +207,12 @@ def show_post_details(post_id):
 
     return render_template("post_detail.html",
                     post=post)
+
+@app.get("/posts/<int:post_id>/edit")
+def show_edit_post_details(post_id):
+    """Shows user the edit post form"""
+
+    post = Post.query.get_or_404(post_id)
+
+    return render_template("edit_post.html",
+                           post=post)

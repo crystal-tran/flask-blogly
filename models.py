@@ -36,6 +36,8 @@ class User(db.Model):
     )
 
     posts = db.relationship('Post', backref='users')
+    # Python convention add two lines of space b/w classes
+
 
 class Post(db.Model):
     """Blog Post"""
@@ -66,6 +68,7 @@ class Post(db.Model):
 
     user_id = db.Column(
         db.Integer,
+        # foreign keys can be nullabe. Make this nullable=False
         db.ForeignKey('users.id')
     )
 
