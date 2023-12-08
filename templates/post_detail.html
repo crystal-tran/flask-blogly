@@ -6,7 +6,7 @@
 <h1>{{ post.title }}</h1>
 <p> {{ post.content }} </p>
 
-<p>By {{ user.first_name }} {{ user.last_name }}</p>
+<p>By {{ post.users.first_name }} {{ post.users.last_name }}</p>
 
 <!-- Buttons -->
 <form method="GET">

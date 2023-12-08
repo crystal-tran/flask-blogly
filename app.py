@@ -165,7 +165,7 @@ def process_add_post_form(user_id):
     is_post_content_valid = True
 
     title = request.form["title"]
-    content = request.form["content_field"]
+    content = request.form["content"]
     # TODO: Alternatively, can loop form fields and apply the same logic
 
     title_trimmed = title.strip()
@@ -185,10 +185,18 @@ def process_add_post_form(user_id):
 
 
     post = Post(title=title_trimmed,
-                content=content_trimmed)
+                content=content_trimmed,
+                user_id=user_id)
 
     db.session.add(post)
     db.session.commit()
 
     return redirect(f"/users/{user_id}")
 
+@app.get("/posts/<int:post_id>")
+def show_post_details(post_id):
+    """Show user the post details"""
+    post = Post.query.get_or_404(post_id)
+
+    return render_template("post_detail.html",
+                    post=post)
