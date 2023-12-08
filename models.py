@@ -35,6 +35,40 @@ class User(db.Model):
         #the url validation can occur at the route level and in the back end
     )
 
+    posts = db.relationship('Post', backref='users')
+
+class Post(db.Model):
+    """Blog Post"""
+
+    __tablename__ = "posts"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+
+    title = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    title = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        nullable=False,
+        default=db.func.now()
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id')
+    )
+
 
 def connect_db(app):
     """Connect the database to our Flask app."""
