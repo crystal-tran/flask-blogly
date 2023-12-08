@@ -4,7 +4,7 @@ import os
 
 from flask import Flask, request, render_template, redirect, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from models import connect_db, db, User, DEFAULT_IMAGE_URL
+from models import connect_db, db, User, DEFAULT_IMAGE_URL, Post
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
@@ -145,3 +145,50 @@ def delete_user(user_id):
     db.session.commit()
 
     return redirect("/users")
+
+########### Post Routes ############
+
+@app.get("/users/<int:user_id>/posts/new")
+def show_add_post_form(user_id):
+    """Displays form to add a post for that user"""
+
+    user = User.query.get_or_404(user_id)
+
+    return render_template("post_form.html",
+                           user=user)
+
+@app.post("/users/<int:user_id>/posts/new")
+def process_add_post_form(user_id):
+    """Add post and redirect to user detail page"""
+
+    is_post_title_valid = True
+    is_post_content_valid = True
+
+    title = request.form["title"]
+    content = request.form["content_field"]
+    # TODO: Alternatively, can loop form fields and apply the same logic
+
+    title_trimmed = title.strip()
+    content_trimmed = content.strip()
+
+
+    if not title_trimmed:
+        flash("You did not provide a title")
+        is_post_title_valid = False
+
+    if not content_trimmed:
+        is_post_content_valid = False
+        flash("You did not provide any content")
+
+    if not is_post_title_valid or not is_post_content_valid:
+        return redirect("/users/<int:user_id>/posts/new")
+
+
+    post = Post(title=title_trimmed,
+                content=content_trimmed)
+
+    db.session.add(post)
+    db.session.commit()
+
+    return redirect(f"/users/{user_id}")
+

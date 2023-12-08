@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Edit Post</h1>
+{% for message in get_flashed_messages() %}
+  <p>{{ message }}</p>
+{% endfor %}
+
+<form action="" method="POST">
+  <label>Title</label>
+  <input type="text" name="first_name" value="{{ post.title }}" required>
+
+  <label>Post Content</label>
+  <textarea name="content_field"
+            rows="4"
+            cols="50"
+            value="{{ post.content }}"
+            required>
+  </textarea>
+
+  <button>Edit</button>
+</form>
+
+<form action="">
+  <button>Cancel</button>
+</form>
+
+{% endblock %}

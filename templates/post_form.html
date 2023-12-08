@@ -6,13 +6,13 @@
 {% for message in get_flashed_messages() %}
   <p>{{ message }}</p>
 {% endfor %}
-<form action="" method="POST">
+<form action="/users/{{ user.id }}/posts/new" method="POST">
   <label>Title</label>
   <input type="text" name="title" required>
   <label>Content</label>
   <!--  <input type="text" name="content_field" required>-->
-  <textarea name="content_field" rows="4" cols="50" required></textarea>
-  <button action="" method="GET">Cancel</button>
+  <textarea name="content" rows="4" cols="50" required></textarea>
+  <button action="/users/{{ user.id }}" method="GET">Cancel</button>
   <button>Add</button>
 </form>
 
